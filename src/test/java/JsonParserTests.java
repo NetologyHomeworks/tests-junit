@@ -7,19 +7,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
 public class JsonParserTests {
-    JsonParser sut;
+    private JsonParser parser = new JsonParser();
 
     @BeforeEach
     public void init() {
         System.out.println("Test started");
-        sut = new JsonParser();
     }
 
     @BeforeAll
     public static void started() {
         System.out.println("Tests started");
     }
-
 
     @AfterEach
     public void finished() {
@@ -50,17 +48,17 @@ public class JsonParserTests {
                 "  }\n" +
                 "]\n";
 
-        assertEquals(expected, sut.readJsonFromFile("new_data.json"));
+        assertEquals(expected, parser.readJsonFromFile("new_data.json"));
     }
 
     @Test
     public void testReadJsonResultStringWrongFile() {
-        assertNull(sut.readJsonFromFile("data.json"));
+        assertNull(parser.readJsonFromFile("data.json"));
     }
 
     @Test
     public void testJsonToObjectListForEmployee() {
-        List<Object> list = sut.jsonToObjectList(sut.readJsonFromFile("new_data.json"), new Employee());
+        List<Object> list = parser.jsonToObjectList(parser.readJsonFromFile("new_data.json"), new Employee());
         var expected = "Employee{id=1, firstName='John', lastName='Smith', country='USA', age=25}\n" +
                 "Employee{id=2, firstName='Ivan', lastName='Petrov', country='RU', age=23}\n";
         var result = list.stream().map(obj -> (Employee) obj).map(item -> item.toString() + "\n").collect(Collectors.joining());
@@ -69,16 +67,16 @@ public class JsonParserTests {
 
     @Test
     public void testJsonToObjectListWithWrongClass() {
-        assertNull(sut.jsonToObjectList(sut.readJsonFromFile("new_data.json"), Employee.class));
+        assertNull(parser.jsonToObjectList(parser.readJsonFromFile("new_data.json"), Employee.class));
     }
 
     @Test
     public void testJsonToObjectListWithWrongFile() {
-        assertNull(sut.jsonToObjectList(sut.readJsonFromFile("data.json"), new Employee()));
+        assertNull(parser.jsonToObjectList(parser.readJsonFromFile("data.json"), new Employee()));
     }
 
     @Test
     public void testJsonToObjectListWithWrongFileAndClass() {
-        assertNull(sut.jsonToObjectList(sut.readJsonFromFile("data.json"), Employee.class));
+        assertNull(parser.jsonToObjectList(parser.readJsonFromFile("data.json"), Employee.class));
     }
 }
